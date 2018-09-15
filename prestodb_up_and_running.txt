@@ -1,0 +1,54 @@
+INSTALL PRESTO SERVER
+======================================
+1. Download presto server and untar the archive
+2. Inside the archive, create the folders etc for configs and data for data* 
+3. create a file node.properties inside etc folder
+	node.environment=hortonworks-hdp
+	node.id=ffffffff-ffff-ffff-ffff-ffffffffffff
+	node.data-dir=/var/presto/data
+4. create a file jvm.config
+	-server
+	-Xmx16G
+	-XX:+UseG1GC
+	-XX:G1HeapRegionSize=32M
+	-XX:+UseGCOverheadLimit
+	-XX:+ExplicitGCInvokesConcurrent
+	-XX:+HeapDumpOnOutOfMemoryError
+	-XX:+ExitOnOutOfMemoryError
+
+5. create a file config.properties inside etc folder
+	coordinator=true
+	node-scheduler.include-coordinator=true
+	http-server.http.port=6090
+	query.max-memory=50GB
+	query.max-memory-per-node=1GB
+	query.max-total-memory-per-node=2GB
+	discovery-server.enabled=true
+	discovery.uri=http://sandbox-hdp.hortonworks.com:6090
+
+6. create a folder log.properties inside etc folder
+	com.facebook.presto=INFO
+
+7. start presto server on foreground using 
+	<presto_home>/bin/launcher run
+
+	or run as daemon process
+	<presto_home>/bin/launcher start
+
+
+INSTALL PRESTO CLIENT
+====================================
+1. Download the presto cli client executable jar
+2. Copy it to a desired location (e.g. /opt/presto-client/presto-client.jar)
+3. sudo ln -s /opt/presto-client/presto-cli-0.210-executable.jar  /usr/bin/presto
+4. presto --server localhost:6090 --catalog hive --schema default
+
+
+CREATE A HIVE CONNECTOR/CATALOGS
+=============================================
+1. Create the folder for the catalog <presto_home/etc/catalog
+2. create the properties file hive.properties in the catalog folder
+3. Add these entries.
+	connector.name=hive-hadoop2
+	hive.metastore.uri=thrift://sandbox-hdp.hortonworks.com:9083
+

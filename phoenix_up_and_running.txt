@@ -1,0 +1,9 @@
+INSTALLING PHOENIX
+=============================
+1. Go to https://phoenix.apache.org/download.html and download the phoenix server for your HBase server.
+2. Extract the archive file
+3. Copy the file phoenix-4.14.0-[hbase_version]-server.jar to the lib folder of all your region servers as well as your master.
+	cp apache-phoenix-4.14.0-HBase-1.1-bin/phoenix-4.14.0-HBase-1.1-server.jar /usr/hdp/current/hbase-master/lib/
+	cp apache-phoenix-4.14.0-HBase-1.1-bin/phoenix-4.14.0-HBase-1.1-server.jar /usr/hdp/current/hbase-regionserver/lib/
+
+4. 
