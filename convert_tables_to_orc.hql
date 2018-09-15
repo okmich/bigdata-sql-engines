@@ -16,7 +16,7 @@ stored as orc
 as
 select * from raw_planes where tailnum <> 'tailnum';
 
-create external table flight
+create table flights
   (year smallint, month tinyint, dayofmonth tinyint,dayofweek tinyint,
   deptime smallint, crsdeptime smallint, arrtime smallint, crsarrtime smallint, 
   uniquecarrier string, flightnum string, tailnum string, actualelapsedtime smallint,
@@ -25,3 +25,11 @@ create external table flight
   cancelled string, cancellationcode string, diverted string, carrierdelay smallint,
   weatherdelay smallint, nasdelay smallint, securitydelay smallint, lateaircraftdelay smallint)
 stored as orc;
+
+
+insert into table flights
+select * from raw_flights;
+
+
+
+select year, dayofweek, count(1) rec_count, sum(depdelay) total_depdelay, min(depdelay) min_depdelay, avg(depdelay) avg_depdelay, max(depdelay) max_depdelay from raw_flights group by year, dayofweek order by year, dayofweek;

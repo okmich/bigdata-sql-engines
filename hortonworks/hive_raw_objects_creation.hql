@@ -1,5 +1,7 @@
 create schema flight_performance;
 
+use flight_performance;
+
 -- create external table for airports
 create external table raw_airports (
     iata string, 
@@ -51,7 +53,7 @@ with serdeproperties (
    "escapeChar"    = "\\"
 )  
 stored as textfile
-location '/user/maria_dev/raw/flight_performance/planes';
+location '/user/maria_dev/raw/flight_performance/plane_data';
 
 
 create external table raw_flights

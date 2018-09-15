@@ -1,0 +1,24 @@
+spark-shell --packages org.apache.phoenix:phoenix-spark:4.13.1-HBase-1.1,org.apache.phoenix:phoenix-core:4.13.1-HBase-1.1,org.apache.hbase:hbase-common:1.1.13,org.apache.hbase:hbase-client:1.1.13,org.apache.hbase:hbase-server:1.1.13 --exclude-packages org.slf4j:slf4j-api
+
+
+
+import org.apache.spark.sql.functions.concat
+import org.apache.spark.sql.SaveMode
+import org.apache.phoenix.spark._
+import org.apache.hadoop.conf.Configuration
+import org.apache.hadoop.hbase._
+
+val conf = HBaseConfiguration.create();
+
+conf.set("hbase.zookeeper.property.clientPort","2181");
+conf.set("hbase.zookeeper.quorum","sandbox-hdp.hortonworks.com");
+conf.set("zookeeper.znode.parent","/hbase");
+
+
+val flightDF = spark.read.table("flight_performance.raw_flights").
+withColumn("id", concat($"year", $"month", $"dayofmonth", $"uniquecarrier", $"flightnum"))
+
+flightDF.saveToPhoenix("flight", conf=conf)
+
+//flightDF.saveToPhoenix("org.apache.phoenix.spark", SaveMode.Overwrite, Map("table" -> ))
+
